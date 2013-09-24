@@ -6,7 +6,7 @@ Simple CRUD module written as Kohana 3.3 module
 Quickstart
 ----------
 
-1. Add to your composer.json:
+* Add to your composer.json:
 
 ```
 {
@@ -25,11 +25,11 @@ Quickstart
 }
 ```
 
-2. Copy modules/admin/config/admin.php into your APPPATH/config directory.
+* Copy modules/admin/config/admin.php into your APPPATH/config directory.
 
-3. Add 'admin' => MODPATH.'admin' into Kohana::modules call in your bootstrap.php
+* Add 'admin' => MODPATH.'admin' into Kohana::modules call in your bootstrap.php
 
-4. Prepare model (a class) which implements Admin_Model_Scaffolding interface
+* Prepare model (a class) which implements Admin_Model_Scaffolding interface
     and implement needed for admin UI methods (in future releases - it will be done automagically).
 
 For example:
@@ -122,7 +122,7 @@ class Model_News implements Admin_Model_Scaffolding
 }
 ```
 
-5. Create a module class in APPPATH/classes/Admin/Module/News.php called Admin_Module_News with content:
+* Create a module class in APPPATH/classes/Admin/Module/News.php called Admin_Module_News with content:
 
 ```php
 <?php
@@ -141,7 +141,7 @@ class Admin_Module_News extends Admin_Module
 }
 ```
 
-6. Insert 'news' into APPPATH/config/admin.php:
+* Insert 'news' into APPPATH/config/admin.php:
 
 ```php
 <?php
@@ -151,4 +151,6 @@ return array(
 );
 ```
 
-7. Retrieve BASE_URL/admin to see result!
+* Put media/ into your DOCROOT path in admin directory.
+
+* Retrieve BASE_URL/admin to see result!
