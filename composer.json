@@ -1,0 +1,22 @@
+{
+	"name":        "kohana/admin",
+	"version": "0.1",
+	"type":        "kohana-module",
+	"description": "Unofficial kohana module giving simple CRUD interface",
+	"homepage":    "http://kohanaframework.org",
+	"license":     "BSD-3-Clause",
+	"keywords":    ["kohana", "framework", "admin"],
+	"authors": [
+		{
+			"name":     "noxxan",
+			"email":    "lukaszlesko@gmail.com",
+			"homepage": "http://github.com/noxxan",
+			"role":     "developer"
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0",
+		"kohana/core":         ">=3.3",
+		"php":                 ">=5.3.3"
+	}
+}
