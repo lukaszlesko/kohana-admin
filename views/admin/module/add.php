@@ -25,6 +25,17 @@
         <div class="col-lg-10">
             <p class="form-control-static"><?php echo !empty($record['id']) ? $record['id'] : '-' ?></p>
         </div>
+        <?php elseif ($field['type'] == 'youtube'): ?>
+        <label for="input<?php echo $fieldName ?>" class="col-lg-2 control-label"><?php echo $module->getFieldDisplayName($fieldName) ?></label>
+        <div class="col-lg-10">
+            <p>
+                <?php if (!empty($form['data'][$fieldName])): ?>
+                <iframe id="ytplayer" type="text/html" width="500" height="390"
+                  src="http://www.youtube.com/embed/<?php echo $form['data'][$fieldName] ?>?autoplay=0"
+                  frameborder="0"></iframe>
+                <?php endif; ?>
+            </p>
+        </div>
         <?php elseif (isset($field['editable']) && $field['editable'] === false): ?>
         <label for="input<?php echo $fieldName ?>" class="col-lg-2 control-label"><?php echo $module->getFieldDisplayName($fieldName) ?></label>
         <div class="col-lg-10">

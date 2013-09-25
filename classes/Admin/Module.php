@@ -9,6 +9,8 @@ abstract class Admin_Module
         'id' => array('type' => 'primary', 'display_name' => 'ID'),
     );
     protected $_listFields = array('id');
+    protected $_searchFields = array();
+    protected $_filterFields = array();
     protected $_model;
     
     public function __construct($modelName)
@@ -91,6 +93,21 @@ abstract class Admin_Module
         return in_array('change', $this->_actions);
     }
     
+    public function isSearchEnabled()
+    {
+        return (bool) $this->_searchFields;
+    }
+    
+    public function getSearchFields()
+    {
+        return $this->_searchFields;
+    }
+    
+    public function getFilterFields()
+    {
+        return $this->_filterFields;
+    }
+    
     public function listView($request)
     {
         if (!$this->listActionEnabled()) {
@@ -100,7 +117,9 @@ abstract class Admin_Module
         // params and filters
         $page = !empty($_GET['page']) ? $_GET['page'] : 1;
 	    $limit = 10;
-        $filters = array();
+        
+        // filters
+        $filters = $this->_parseFilters($_GET);
         
         // fetch data
         $records = $this->_model->getAll($page, $limit, $filters);
@@ -122,6 +141,7 @@ abstract class Admin_Module
         $view->set('records', $records);
         $view->set('recordsCount', $recordsCount);
         $view->set('pager', $pager);
+        $view->set('filters', $filters);
         
         return $view;
     }
@@ -214,5 +234,24 @@ abstract class Admin_Module
         return $view;
     }
     
-    
+    protected function _parseFilters($data)
+    {
+        $filters = array('phrase' => null, 'search' => array(), 'filters' => array());
+        
+        if (!empty($data['query'])) {
+            $filters['phrase'] = $data['query'];
+            
+            foreach ($this->getSearchFields() as $search) {
+                $filters['search'][$search] = $data['query'];
+            }
+        }
+        
+        foreach ($this->getFilterFields() as $filter) {
+            if (!empty($data['options_' . $filter])) {
+                $filters['filters'][$filter] = $data['options_' . $filter];
+            }
+        }
+        
+        return $filters;
+    }
 }
