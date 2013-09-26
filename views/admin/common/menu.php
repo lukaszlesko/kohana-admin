@@ -17,5 +17,8 @@
         <li><a href="<?php echo $module->getListUrl() ?>"><?php echo $module->getDisplayName() ?></a></li>
         <?php endforeach; ?>
     </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="<?php echo URL::base() ?>admin/logout">Wyloguj się</a></li>
+    </ul>
   </div><!-- /.navbar-collapse -->
 </nav>

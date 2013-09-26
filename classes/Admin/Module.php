@@ -214,8 +214,14 @@ abstract class Admin_Module
         $formState = $form->getFormState();
         
         if ($formState['state'] == Admin_Form_Add::STATE_FORM_SENDED_OK) {
-            // save into database
-            $updateStatus = $this->_model->save($record['id'], $formState['data']);
+            $editedFields = array();
+            foreach ($this->getFields() as $fieldName => $field) {
+                if ($field['type'] != 'primary' && (!isset($field['editable']) || $field['editable'])) {
+                    $editedFields[$fieldName] = !empty($data[$fieldName]) ? $data[$fieldName] : 0;
+                }
+            }
+
+            $updateStatus = $this->_model->save($record['id'], $editedFields);
         
             if (!$updateStatus) {
                 $form->setGlobalErrorMessage('Błąd zapisu w bazie danych. Spróbuj ponownie za chwilę.');
