@@ -217,7 +217,7 @@ abstract class Admin_Module
             $editedFields = array();
             foreach ($this->getFields() as $fieldName => $field) {
                 if ($field['type'] != 'primary' && (!isset($field['editable']) || $field['editable'])) {
-                    $editedFields[$fieldName] = !empty($data[$fieldName]) ? $data[$fieldName] : 0;
+                    $editedFields[$fieldName] = !empty($data[$fieldName]) ? $data[$fieldName] : false;
                 }
             }
 
@@ -227,7 +227,7 @@ abstract class Admin_Module
                 $form->setGlobalErrorMessage('Błąd zapisu w bazie danych. Spróbuj ponownie za chwilę.');
                 $formState = $form->getFormState();
             } else {
-                HTTP::redirect($this->getListUrl());
+                HTTP::redirect($this->getRecordEditUrl($record['id']));
                 exit;
             }
         }
