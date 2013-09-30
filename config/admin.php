@@ -1,5 +1,7 @@
 <?php
 return array(
-    'auth' => array('username' => 'admin', 'password' => 'admin'),
-    'modules' => array('news'),
+    'auth' => array(
+        array('id' => 1, 'username' => 'admin', 'password' => 'admin'),
+    ),
+    'modules' => array('news')
 );

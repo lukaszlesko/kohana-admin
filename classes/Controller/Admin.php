@@ -60,10 +60,12 @@ class Controller_Admin extends Controller_Template
         $formState = $form->getFormState();
         
         if ($formState['state'] == Admin_Form_Add::STATE_FORM_SENDED_OK) {
-            if ($formState['data']['username'] == $this->_config['auth']['username'] && $formState['data']['password'] == $this->_config['auth']['password']) {
-                $this->_session->set('admin_user', 1);
-                HTTP::redirect(URL::base() . 'admin/index');
-                exit;
+            foreach ($this->_config['auth'] as $admin) {
+                if ($formState['data']['username'] == $admin['username'] && $formState['data']['password'] == $admin['password']) {
+                    $this->_session->set('admin_user', $admin['id']);
+                    HTTP::redirect(URL::base() . 'admin/index');
+                    exit;
+                }
             }
             
             $form->setGlobalErrorMessage('Niepoprawny login i/lub hasło');
