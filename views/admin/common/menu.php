@@ -1,3 +1,10 @@
+<script>
+// auto logout
+setTimeout(function() {
+    top.location.href = '<?php echo URL::base() ?>admin/logout';
+}, <?php echo $config['auto_logout_time_miliseconds'] ?>);
+</script>
+
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
