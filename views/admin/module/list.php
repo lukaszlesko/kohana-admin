@@ -1,5 +1,20 @@
 <?php echo Admin_View_MainMenu::factory() ?>
 
+<style>
+.field_boolean {
+    width: 80px;
+}
+.field_datetime {
+    width: 100px;
+}
+.field_primary {
+    width: 50px;
+}
+.field_actions {
+    width: 100px;
+}
+</style>
+
 <div style="float: right; margin: 10px; ">
     <?php if ($module->addActionEnabled()): ?>
     <a href="<?php echo $module->getRecordAddUrl() ?>" class="btn btn-primary btn-lg">Dodaj</a>
@@ -13,9 +28,9 @@
         <thead>
             <tr>
             <?php foreach ($module->getListFields() as $field): ?>
-                <th><?php echo $module->getFieldDisplayName($field); ?></th>
+                <th class="field_<?php echo $module->getFieldType($field); ?>"><?php echo $module->getFieldDisplayName($field); ?></th>
             <?php endforeach; ?>
-                <th></th>
+                <th class="field_actions"></th>
             </tr>
         </thead>
         <tbody>

@@ -73,6 +73,11 @@ abstract class Admin_Module
         return $this->_fields[$fieldName]['display_name'];
     }
     
+    public function getFieldType($fieldName)
+    {
+        return $this->_fields[$fieldName]['type'];
+    }
+    
     public function addActionEnabled()
     {
         return in_array('add', $this->_actions);
