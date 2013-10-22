@@ -209,6 +209,13 @@ abstract class Admin_Module
         
         $record = $this->_model->getOne($_GET['id']);
         
+        $accessLogModelName = Kohana::$config->load('admin.access_log_model');
+        
+        if ($record && $accessLogModelName) {
+            $accessModel = Model::factory($accessLogModelName);
+            $accessModel->save($this->getName(), 'view_details', $record['id'], Session::instance()->get('admin_user'));
+        }
+        
         $data = !empty($_POST) ? $_POST : array();
         
         $prepopulatedFields = $record;
