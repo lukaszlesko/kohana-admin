@@ -66,25 +66,42 @@
       </div>
       <?php endif; ?>
       <?php foreach ($module->getFilterFields() as $filter): ?>
-      <h4><?php echo $module->getFieldDisplayName($filter); ?></h4>
-      <div class="radio">
-          <label>
-            <input type="radio" name="options_<?php echo $filter?>" value="" <?php echo empty($filters['filters'][$filter]) ? ' checked' : '' ?>>
-            wszystko
-          </label>
-      </div>
-      <div class="radio">
-          <label>
-            <input type="radio" name="options_<?php echo $filter?>" value="1" <?php echo !empty($filters['filters'][$filter]) && $filters['filters'][$filter] == '1' ? ' checked' : '' ?>>
-            tak
-          </label>
-      </div>
-      <div class="radio">
-          <label>
-            <input type="radio" name="options_<?php echo $filter?>" value="2" <?php echo !empty($filters['filters'][$filter]) && $filters['filters'][$filter] == '2' ? ' checked' : '' ?>>
-            nie
-          </label>
-      </div>
+      <h4><?php echo $module->getFieldDisplayName($filter['name']); ?></h4>
+      <?php if ($filter['type'] == 'boolean'): ?>
+          <div class="radio">
+              <label>
+                <input type="radio" name="options_<?php echo $filter['name'] ?>" value="" <?php echo empty($filters['filters'][$filter['name']]) ? ' checked' : '' ?>>
+                wszystko
+              </label>
+          </div>
+          <div class="radio">
+              <label>
+                <input type="radio" name="options_<?php echo $filter['name']?>" value="1" <?php echo !empty($filters['filters'][$filter['name']]) && $filters['filters'][$filter['name']] == '1' ? ' checked' : '' ?>>
+                tak
+              </label>
+          </div>
+          <div class="radio">
+              <label>
+                <input type="radio" name="options_<?php echo $filter['name']?>" value="2" <?php echo !empty($filters['filters'][$filter['name']]) && $filters['filters'][$filter['name']] == '2' ? ' checked' : '' ?>>
+                nie
+              </label>
+          </div>
+      <?php elseif ($filter['type'] == 'foreign'): ?>
+          <div class="radio">
+              <label>
+                <input type="radio" name="foreign_<?php echo $filter['name'] ?>" value="" <?php echo empty($filters['filters'][$filter['name']]) ? ' checked' : '' ?>>
+                wszystko
+              </label>
+          </div>
+          <?php foreach ($filter['choices'] as $choice): ?>
+          <div class="radio">
+              <label>
+                <input type="radio" name="foreign_<?php echo $filter['name'] ?>" value="<?php echo $choice['id'] ?>" <?php echo !empty($filters['filters'][$filter['name']]) && $filters['filters'][$filter['name']] == $choice['id'] ? ' checked' : '' ?>>
+                <?php echo $choice['display'] ?>
+              </label>
+          </div>
+          <?php endforeach; ?>
+      <?php endif; ?>
       <?php endforeach; ?>
       <div class="form-group">
         <div class="col-lg-offset-2 col-lg-10">

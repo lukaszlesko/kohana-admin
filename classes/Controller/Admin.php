@@ -38,7 +38,7 @@ class Controller_Admin extends Controller_Template
     public function action_index()
     {
         if (!$this->_user) {
-            HTTP::redirect(URL::base() . 'admin/login');
+            HTTP::redirect('admin/login');
             exit;
         }
     }
@@ -46,7 +46,7 @@ class Controller_Admin extends Controller_Template
     public function action_login()
     {
         if ($this->_user) {
-            HTTP::redirect(URL::base() . 'admin');
+            HTTP::redirect('admin');
             exit;
         }
         
@@ -63,7 +63,7 @@ class Controller_Admin extends Controller_Template
             foreach ($this->_config['auth'] as $admin) {
                 if ($formState['data']['username'] == $admin['username'] && $formState['data']['password'] == $admin['password']) {
                     $this->_session->set('admin_user', $admin['id']);
-                    HTTP::redirect(URL::base() . 'admin/index');
+                    HTTP::redirect('admin/index');
                     exit;
                 }
             }
@@ -78,14 +78,14 @@ class Controller_Admin extends Controller_Template
     public function action_logout()
     {
         $this->_session->set('admin_user', null);
-        HTTP::redirect(URL::base() . 'admin/login');
+        HTTP::redirect('admin/login');
         exit;
     }
     
     public function action_module()
     {
         if (!$this->_user) {
-            HTTP::redirect(URL::base() . 'admin/login');
+            HTTP::redirect('admin/login');
             exit;
         }
         

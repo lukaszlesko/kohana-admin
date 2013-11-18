@@ -12,6 +12,7 @@ abstract class Admin_Module
     protected $_searchFields = array();
     protected $_filterFields = array();
     protected $_model;
+    protected $_recordsPerPage = 10;
     
     public function __construct($modelName)
     {
@@ -78,6 +79,11 @@ abstract class Admin_Module
         return $this->_fields[$fieldName]['type'];
     }
     
+    public function getFieldForeign($fieldName)
+    {
+        return !empty($this->_fields[$fieldName]['foreign']) ? $this->_fields[$fieldName]['foreign'] : null;
+    }
+    
     public function addActionEnabled()
     {
         return in_array('add', $this->_actions);
@@ -110,7 +116,36 @@ abstract class Admin_Module
     
     public function getFilterFields()
     {
-        return $this->_filterFields;
+        $filters = array();
+        
+        foreach ($this->_filterFields as $filter) {
+            // get field type
+            $fieldType = $this->getFieldType($filter);
+            $foreignFilter = $this->getFieldForeign($filter);
+            
+            $filterRow = null;
+            
+            switch ($fieldType) {
+                case 'boolean':
+                    $filterRow = array('type' => 'boolean', 'name' => $filter);
+                    break;
+                case 'char':
+                    if ($foreignFilter) {
+                        $filterRow = array(
+                            'type' => 'foreign',
+                            'name' => $filter,
+                            'choices' => $this->_model->getForeignKeyChoices($foreignFilter['table'], $filter)
+                        );
+                    }
+                    break;
+            }
+            
+            if ($filterRow) {
+                $filters[] = $filterRow;
+            }
+        }
+        
+        return $filters;
     }
     
     public function listView($request)
@@ -121,7 +156,7 @@ abstract class Admin_Module
         
         // params and filters
         $page = !empty($_GET['page']) ? $_GET['page'] : 1;
-	    $limit = 10;
+	    $limit = $this->_recordsPerPage;
         
         // filters
         $filters = $this->_parseFilters($_GET);
@@ -175,7 +210,7 @@ abstract class Admin_Module
                 $formState = $form->getFormState();
             } else {
                 // redirect to change form
-                HTTP::redirect($this->getRecordEditUrl($recordId));
+                HTTP::redirect(str_replace(URL::base(), '', $this->getRecordEditUrl($recordId)));
                 exit;
             }
         }
@@ -197,7 +232,7 @@ abstract class Admin_Module
         
         $this->_model->delete($record['id']);
         
-        HTTP::redirect($this->getListUrl());
+        HTTP::redirect(str_replace(URL::base(), '', $this->getListUrl()));
         exit;
     }
     
@@ -239,7 +274,7 @@ abstract class Admin_Module
                 $form->setGlobalErrorMessage('Błąd zapisu w bazie danych. Spróbuj ponownie za chwilę.');
                 $formState = $form->getFormState();
             } else {
-                HTTP::redirect($this->getRecordEditUrl($record['id']));
+                HTTP::redirect(str_replace(URL::base(), '', $this->getRecordEditUrl($record['id'])));
                 exit;
             }
         }
@@ -265,8 +300,10 @@ abstract class Admin_Module
         }
         
         foreach ($this->getFilterFields() as $filter) {
-            if (!empty($data['options_' . $filter])) {
-                $filters['filters'][$filter] = $data['options_' . $filter];
+            if (!empty($data['options_' . $filter['name']])) {
+                $filters['filters'][$filter['name']] = $data['options_' . $filter['name']];
+            } elseif (!empty($data['foreign_' . $filter['name']])) {
+                $filters['filters'][$filter['name']] = $data['foreign_' . $filter['name']];
             }
         }
         
