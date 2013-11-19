@@ -1,6 +1,5 @@
 {
 	"name":        "kohana/admin",
-	"version":     "0.2.0",
 	"type":        "kohana-module",
 	"description": "Unofficial kohana module giving simple CRUD interface",
 	"homepage":    "http://kohanaframework.org",
