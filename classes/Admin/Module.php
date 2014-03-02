@@ -136,6 +136,12 @@ abstract class Admin_Module
                             'name' => $filter,
                             'choices' => $this->_model->getForeignKeyChoices($foreignFilter['table'], $filter)
                         );
+                    } else {
+                        $filterRow = array(
+                            'type' => 'choices', 
+                            'name' => $filter,
+                            'choices' => $this->_model->getChoices($filter)
+                        );
                     }
                     break;
             }

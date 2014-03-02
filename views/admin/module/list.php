@@ -101,6 +101,21 @@
               </label>
           </div>
           <?php endforeach; ?>
+      <?php elseif ($filter['type'] == 'choices'): ?>
+          <div class="radio">
+              <label>
+                <input type="radio" name="options_<?php echo $filter['name'] ?>" value="" <?php echo empty($filters['filters'][$filter['name']]) ? ' checked' : '' ?>>
+                wszystko
+              </label>
+          </div>
+          <?php foreach ($filter['choices'] as $choice): ?>
+          <div class="radio">
+              <label>
+                <input type="radio" name="options_<?php echo $filter['name'] ?>" value="<?php echo $choice['id'] ?>" <?php echo !empty($filters['filters'][$filter['name']]) && $filters['filters'][$filter['name']] == $choice['id'] ? ' checked' : '' ?>>
+                <?php echo $choice['display'] ?>
+              </label>
+          </div>
+          <?php endforeach; ?>
       <?php endif; ?>
       <?php endforeach; ?>
       <div class="form-group">
