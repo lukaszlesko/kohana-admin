@@ -24,6 +24,23 @@
 <h2><?php echo $module->getDisplayName() ?></h2>
 
 <div style="width: 75%; margin-right: 5%; float: left;">
+    <?php if ($module->getListActions()): ?>
+    <form method="post" class="form-horizontal" role="form">
+        <input type="hidden" name="list_action" value="1">
+        <div class="form-group">
+        <label for="inputSearch" class="col-lg-2 control-label">Akcja</label>
+        <div class="col-lg-10">
+          <select class="form-control" name="action">
+              <?php foreach ($module->getListActions() as $action): ?>
+              <option value="<?php echo $action->getId() ?>"><?php echo $action->getDisplayName() ?></option>
+              <?php endforeach; ?>
+          </select>
+          <button type="submit" class="btn btn-default">wykonaj</button>
+        </div>
+      </div>
+    </form>
+    <?php endif; ?>
+    
     <table class="table table-striped">
         <thead>
             <tr>

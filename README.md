@@ -153,4 +153,18 @@ return array(
 
 * Put media/ into your DOCROOT path in admin directory.
 
-* Retrieve BASE_URL/admin to see result!
+* Retrieve BASE_URL/admin/login to see result!
+
+# Changelog
+
+## 0.2.2
+
+### added CSV export of given list, to use that feature you need to add for example:
+
+```
+    protected $_listActions = array(
+        array('Admin_ListAction_ExportCsv', array('fields' => array('id', 'edition_id', 'state', 'quiz_result', 'answer', 'add_date')))
+    );
+```
+
+to your subclass of Admin_Module, where you want that option.

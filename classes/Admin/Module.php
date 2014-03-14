@@ -13,6 +13,8 @@ abstract class Admin_Module
     protected $_filterFields = array();
     protected $_model;
     protected $_recordsPerPage = 10;
+    protected $_listActions = array();
+    protected $_listActionsClasses = array();
     
     public function __construct($modelName)
     {
@@ -154,6 +156,36 @@ abstract class Admin_Module
         return $filters;
     }
     
+    protected function _prepareListActions()
+    {
+        if ($this->_listActionsClasses) {
+            return;
+        }
+        
+        foreach ($this->_listActions as $action) {
+            $this->addListAction($action);
+        }
+    }
+
+    public function addListAction($action) 
+    {
+        $className = $action[0];
+        $params = $action[1];
+        
+        try {
+            $class = new $className($params);
+            $this->_listActionsClasses[$class->getId()] = $class;
+        } catch (Exception $e) {
+            Kohana::$log->add(Log::ERROR, sprintf('[admin] Class for list admin not found (%s)', $className));
+            return;
+        }
+    }
+    
+    public function getListActions()
+    {
+        return $this->_listActionsClasses;
+    }
+    
     public function listView($request)
     {
         if (!$this->listActionEnabled()) {
@@ -170,6 +202,17 @@ abstract class Admin_Module
         // fetch data
         $records = $this->_model->getAll($page, $limit, $filters);
         $recordsCount = $this->_model->countAll($filters);
+        
+        // prepare list actions
+        $this->_prepareListActions();
+        // execute list action if needed
+        if (!empty($_POST['list_action']) && !empty($_POST['action'])) {
+            if (empty($this->_listActionsClasses[$_POST['action']])) {
+                throw new HTTP_Exception_404;
+            }
+            
+            $this->_listActionsClasses[$_POST['action']]->perform($this->_model, $filters);
+        }
         
         // pager
         $pager = Pagination::factory(
