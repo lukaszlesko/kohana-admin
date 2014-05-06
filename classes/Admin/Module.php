@@ -241,7 +241,7 @@ abstract class Admin_Module
             throw new HTTP_Exception_404();
         }
         
-        $data = !empty($_POST) ? $_POST : array();
+        $data = array_merge($_POST, $_FILES);
         
         $prepopulatedFields = array();
         
@@ -300,7 +300,7 @@ abstract class Admin_Module
             $accessModel->save($this->getName(), 'view_details', $record['id'], Session::instance()->get('admin_user'));
         }
         
-        $data = !empty($_POST) ? $_POST : array();
+        $data = array_merge($_POST, $_FILES);
         
         $prepopulatedFields = $record;
         

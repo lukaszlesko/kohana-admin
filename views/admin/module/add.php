@@ -16,7 +16,7 @@
     </div>
 <?php endif; ?>
 
-<form class="form-horizontal" role="form" method="post">
+<form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
     <input type="hidden" name="add_form" value="1">
     <?php foreach ($module->getFields() as $fieldName => $field): ?>
     <div class="form-group<?php echo !empty($form['errors'][$fieldName]) ? ' has-error' : '' ?>">
@@ -34,6 +34,17 @@
                   src="http://www.youtube.com/embed/<?php echo $form['data'][$fieldName] ?>?autoplay=0"
                   frameborder="0"></iframe>
                 <?php endif; ?>
+            </p>
+        </div>
+        <?php elseif ($field['type'] == 'image'): ?>
+        <label for="input<?php echo $fieldName ?>" class="col-lg-2 control-label"><?php echo $module->getFieldDisplayName($fieldName) ?></label>
+        <div class="col-lg-10">
+            <p>
+                <?php if (!empty($form['data'][$fieldName])): ?>
+                aktualne: <img src="<?php echo URL::base() ?>upload/<?php echo $form['data'][$fieldName] ?>" width="100">
+                <?php endif; ?>
+                
+                <input type="file" class="form-control" name="<?php echo $fieldName ?>" id="input<?php echo $fieldName ?>">
             </p>
         </div>
         <?php elseif (isset($field['editable']) && $field['editable'] === false): ?>
