@@ -61,7 +61,7 @@ class Controller_Admin extends Controller_Template
         
         if ($formState['state'] == Admin_Form_Add::STATE_FORM_SENDED_OK) {
             foreach ($this->_config['auth'] as $admin) {
-                if ($formState['data']['username'] == $admin['username'] && $formState['data']['password'] == $admin['password']) {
+                if ($formState['data']['username'] == $admin['username'] && crypt($formState['data']['password'], $this->_config['salt']) == $admin['password']) {
                     $this->_session->set('admin_user', $admin['id']);
                     HTTP::redirect('admin/index');
                     exit;
